@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Album</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+      img {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+      }
+    </style>
+</head>
+<body>
+       <div>
+        <h2>Album List </h2>
+        <a class="btn btn-success" th:href="@{/albums/add-album}">Thêm mới</a>
+
+        <!-- Search Form -->
+        <div class="row mb-3">
+            <div class="col-md-6 offset-md-6">
+                <form method="get" th:action="@{/albums/search}" class="input-group">
+                   <input type="text" name="keyword" class="form-control" placeholder="Search album..." th:value="${keyword}" />
+                   <button type="submit" class="btn btn-secondary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Display search results or all albums -->
+        <div th:if="${#lists.isEmpty(alb)}">
+            <div class="alert alert-warning" role="alert">
+                No albums found for the keyword: <strong th:text="${keyword}"></strong>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên album</th>
+                    <th>Năm phát hành</th>
+                    <th>Hình ảnh</th>
+                    <th>Description</th>
+                    <th>Gía</th>
+                    <th>Trạng thái</th>
+                    <th>Thể loại</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Thymeleaf loop to display albums -->
+                <tr th:each="album : ${alb}">
+                    <td th:text="${album.maal}"></td>
+                    <td th:text="${album.tenAl}"></td>
+                    <td th:text="${album.namPhatHanhFormatted}"></td>
+                    <td>
+                        <!-- Hiển thị ảnh nhỏ -->
+                        <img th:src="@{${album.hinhAnh}}" alt="Album Image" style="width: 100px; height: auto;">
+                    </td>
+                    <td th:text="${album.description}"></td>
+                    <td th:text="${album.gia}"></td>
+                    <td th:text="${album.status}"></td>
+                    <td th:text="${album.theloai.tenTheLoai}"></td>
+                    <td>
+                        <a th:href="@{/albums/edit-album/{maal}(maal=${album.maal})}" class="btn btn-info btn-sm">Chỉnh sửa</a>
+                        <a th:href="@{/albums/delete/{maal}(maal=${album.maal})}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc chắn xóa không?');">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

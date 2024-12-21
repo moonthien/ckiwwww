@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Album</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        h2 {
+            font-weight: bold;
+            color: '#ccc';
+            text-align: center;
+        }
+        .footer {
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Edit Album</h2>
+        <!-- Form chỉnh sửa sản phẩm -->
+        <form th:action="@{/albums/update/{maal}(maal=${updateAlbum.maal})}" th:object="${updateAlbum}" method="post" enctype="multipart/form-data">                  
+            <div class="form-group">
+                <label for="tenAl">Ten album</label>
+                <input type="text" class="form-control" id="tenAl" th:field="*{tenAl}" placeholder="Enter ten album">
+            </div>
+            
+            <div class="form-group">
+                <label for="namPhatHanh">Nam phat hanh</label>
+                <input type="date" class="form-control" id="namPhatHanh" th:field="*{namPhatHanh}">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" th:field="*{description}" placeholder="Enter description" rows="4"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="hinhAnh">Hinh anh</label>
+                <input type="file" class="form-control" id="hinhAnh" name="image" accept="image/*">
+                <div th:if="${updateAlbum.hinhAnh}">
+                   <img th:src="@{${updateAlbum.hinhAnh}}" alt="Current Album Image" style="max-width: 150px; height: auto;">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="gia">Gia</label>
+                <input type="number" class="form-control" id="gia" th:field="*{gia}" placeholder="Enter gia" step="1" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Trạng thái</label>
+                <div>
+                   <label>
+                      <input type="radio" th:field="*{status}" value="Đang phát hành" /> Đang phát hành
+                   </label>
+                </div>
+                <div>
+                   <label>
+                      <input type="radio" th:field="*{status}" value="Ngưng phát hành" /> Ngưng phát hành
+                   </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="theloai">The loai</label>
+                <select th:field="*{theloai.maTheLoai}" id="theloai" class="form-control">
+                    <option th:each="theloai : ${theloais}"
+                            th:value="${theloai.maTheLoai}"
+                            th:text="${theloai.tenTheLoai}"
+                            th:selected="${theloai.maTheLoai == updateAlbum.theloai.maTheLoai}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="footer">
+                <a href="/albums" class="btn btn-secondary">Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
